@@ -15,6 +15,7 @@
 #include "ngx_http_set_local_today.h"
 #include "ngx_http_set_hash.h"
 #include "ngx_http_set_hex.h"
+#include "ngx_http_set_rot13.h"
 #include "ngx_http_set_base64.h"
 #if NGX_OPENSSL
 #include "ngx_http_set_hmac.h"
@@ -43,6 +44,13 @@ static ngx_conf_deprecated_t  ngx_conf_deprecated_set_misc_base32_padding = {
 static ndk_set_var_t  ngx_http_set_misc_set_encode_base64_filter = {
     NDK_SET_VAR_VALUE,
     (void *) ngx_http_set_misc_set_encode_base64,
+    1,
+    NULL
+};
+
+static ndk_set_var_t  ngx_http_set_misc_set_rot13_filter = {
+    NDK_SET_VAR_VALUE,
+    (void *) ngx_http_set_misc_set_rot13,
     1,
     NULL
 };
@@ -214,6 +222,15 @@ static ngx_command_t  ngx_http_set_misc_commands[] = {
         0,
         &ngx_http_set_misc_set_encode_base64_filter
     },
+    {   ngx_string ("set_rot13"),
+        NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
+            |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE12,
+        ndk_set_var_value,
+        0,
+        0,
+        &ngx_http_set_misc_set_rot13_filter
+    },
+
     {   ngx_string ("set_decode_base64"),
         NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
             |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE12,
